@@ -41,7 +41,7 @@ def cityreader(cities=[]):
             if line_count == 0:
                 line_count += 1
             else:
-                cities += [City(row[0], row[3], row[4])]
+                cities += [City(row[0], float(row[3]), float(row[4]))]
                 line_count += 1
     return cities
 
@@ -82,14 +82,50 @@ for c in cities:
 # Salt Lake City: (40.7774,-111.9301)
 
 # TODO Get latitude and longitude values from the user
+point1 = []
+point2 = []
+
+in_point1 = input("Enter lat1,lon1: ")
+point1 = in_point1.split(",")
+in_point2 = input("Enter lat2,lon2: ")
+point2 = in_point2.split(",")
 
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
     # within will hold the cities that fall within the specified region
+    upper_right = []
+    lower_left = []
+
+    if(lat1 < lat2):
+        upper_right.append(lat1)
+        lower_left.append(lat2)
+    else:
+        upper_right.append(lat2)
+        lower_left.append(lat1)
+
+    if(lon1 > lon2):
+        upper_right.append(lon1)
+        lower_left.append(lon2)
+    else:
+        upper_right.append(lon2)
+        lower_left.append(lon1)
+
     within = []
+
+    for i in cities:
+        if(i.lat > upper_right[0] and i.lat < lower_left[0]):
+            if(i.lon < upper_right[1] and i.lon > lower_left[1]):
+                within.append(i)
 
     # TODO Ensure that the lat and lon valuse are all floats
     # Go through each city and check to see if it falls within
     # the specified coordinates.
 
     return within
+
+
+within_points = cityreader_stretch(float(point1[0]), float(
+    point1[1]), float(point2[0]), float(point2[1]), cities)
+
+for i in within_points:
+    print(i)
